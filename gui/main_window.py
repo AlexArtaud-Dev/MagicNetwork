@@ -1,26 +1,13 @@
 import sys
 import pandas as pd
 from PySide6.QtWidgets import (QApplication, QWidget, QVBoxLayout, QLabel, QSpinBox, QPushButton,
-                               QFileDialog, QComboBox, QTextEdit, QHBoxLayout, QDoubleSpinBox, QDialog,
-                               QProgressBar, QProgressDialog)
-from PySide6.QtCore import Qt, QThread, Signal
+                               QFileDialog, QComboBox, QTextEdit, QHBoxLayout, QDoubleSpinBox, QProgressDialog)
+from PySide6.QtCore import Qt
+from .training_thread import TrainingThread
 from neural_network.csv_dataloader import CSVDataLoader
 from neural_network.neural_network import NeuralNetwork
 from neural_network.activation_functions import ActivationFunction
 from neural_network.loss_functions import mse, mse_prime
-
-class TrainingThread(QThread):
-
-    def __init__(self, neural_network, x_data, y_data, epochs, learning_rate):
-        super().__init__()
-        self.neural_network = neural_network
-        self.x_data = x_data
-        self.y_data = y_data
-        self.epochs = epochs
-        self.learning_rate = learning_rate
-
-    def run(self):
-        self.neural_network.fit(self.x_data, self.y_data, self.epochs, self.learning_rate)
 
 class NeuralNetworkApp(QWidget):
     def __init__(self):
@@ -109,8 +96,13 @@ class NeuralNetworkApp(QWidget):
         self.train_button.clicked.connect(self.train_network)
         self.layout.addWidget(self.train_button)
 
+        # Status box
+        self.status_box = QLabel("Status: Waiting for action")
+        self.layout.addWidget(self.status_box)
+
         # Load CSV for prediction button
         self.load_csv_predict_button = QPushButton("Load Prediction CSV")
+        self.load_csv_predict_button.setEnabled(False)
         self.load_csv_predict_button.clicked.connect(self.load_csv_for_prediction)
         self.layout.addWidget(self.load_csv_predict_button)
 
@@ -160,10 +152,12 @@ class NeuralNetworkApp(QWidget):
                 self.remove_csv_button.clicked.connect(self.remove_csv)
                 self.load_csv_layout.addWidget(self.remove_csv_button)
                 self.load_csv_button.setEnabled(False)
+                self.status_box.setText(f"Loaded CSV: {file_path.split('/')[-1]}")
                 print(f"Loaded CSV: {file_path}")
                 print(f"X data: {self.x_data}")
                 print(f"Y data: {self.y_data}")
             except Exception as e:
+                self.status_box.setText(f"Error loading CSV: {e}")
                 print(f"Error loading CSV: {e}")
 
     def remove_csv(self):
@@ -178,6 +172,8 @@ class NeuralNetworkApp(QWidget):
         self.data_loader = None
         self.x_data = None
         self.y_data = None
+        self.load_csv_predict_button.setEnabled(False)
+        self.status_box.setText("CSV file removed")
         print("CSV file removed")
 
     def train_network(self):
@@ -194,8 +190,9 @@ class NeuralNetworkApp(QWidget):
                                                 activation_function, mse, mse_prime)
             self.training_thread = TrainingThread(self.neural_network, self.x_data, self.y_data, epochs, learning_rate)
             self.training_thread.started.connect(self.show_training_spinner)
-            self.training_thread.finished.connect(self.hide_training_spinner)
+            self.training_thread.finished.connect(self.on_training_finished)
             self.training_thread.start()
+            self.status_box.setText("Training started")
             print("Training started")
 
     def show_training_spinner(self):
@@ -211,6 +208,11 @@ class NeuralNetworkApp(QWidget):
     def hide_training_spinner(self):
         if self.training_dialog:
             self.training_dialog.close()
+
+    def on_training_finished(self):
+        self.hide_training_spinner()
+        self.load_csv_predict_button.setEnabled(True)
+        self.status_box.setText("Training completed")
 
     def load_csv_for_prediction(self):
         file_path, _ = QFileDialog.getOpenFileName(self, "Load Prediction CSV", "", "CSV Files (*.csv)")
@@ -231,6 +233,7 @@ class NeuralNetworkApp(QWidget):
                     self.format_predictions(predictions)
                     print(f"Predictions: {predictions}")
             except Exception as e:
+                self.status_box.setText(f"Error loading CSV for prediction: {e}")
                 print(f"Error loading CSV for prediction: {e}")
 
     def format_predictions(self, predictions):
@@ -238,9 +241,3 @@ class NeuralNetworkApp(QWidget):
         for idx, prediction in enumerate(predictions):
             formatted_predictions += f"Prediction {idx + 1} -> {prediction[0][0]:.6f}\n"
         self.prediction_output.setText(formatted_predictions)
-
-if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    ex = NeuralNetworkApp()
-    ex.show()
-    sys.exit(app.exec())
