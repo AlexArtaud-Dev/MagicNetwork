@@ -39,7 +39,7 @@ class NeuralNetwork:
 
         return result
 
-    def fit(self, x_train, y_train, epochs, learning_rate):
+    def fit(self, x_train, y_train, epochs = 20000, learning_rate = 0.1):
         samples = len(x_train)
 
         for i in range(epochs):
