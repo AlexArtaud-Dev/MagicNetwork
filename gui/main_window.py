@@ -97,7 +97,8 @@ class NeuralNetworkApp(QWidget):
         self.layout.addWidget(self.train_button)
 
         # Status box
-        self.status_box = QLabel("Status: Waiting for action")
+        self.status_box = QLabel("Status: Not Trained")
+        self.status_box.setStyleSheet("color: orange")
         self.layout.addWidget(self.status_box)
 
         # Load CSV for prediction button
@@ -115,16 +116,16 @@ class NeuralNetworkApp(QWidget):
 
     def update_activation_function_info(self):
         activation_function = self.activation_function_combobox.currentText()
-        if activation_function == "RELU":
+        if (activation_function == "RELU"):
             self.activation_function_info.setText("ReLU: Output [0, +∞), Derivative 1 if x > 0 else 0")
             self.set_default_parameters(learning_rate=0.01, epochs=1000)
-        elif activation_function == "TANH":
+        elif (activation_function == "TANH"):
             self.activation_function_info.setText("Tanh: Output [-1, 1], Derivative 1 - tanh(x)^2")
             self.set_default_parameters(learning_rate=0.01, epochs=5000)
-        elif activation_function == "SIGMOID":
+        elif (activation_function == "SIGMOID"):
             self.activation_function_info.setText("Sigmoid: Output (0, 1), Derivative σ(x)*(1-σ(x))")
             self.set_default_parameters(learning_rate=0.1, epochs=2000)
-        elif activation_function == "LEAKY_RELU":
+        elif (activation_function == "LEAKY_RELU"):
             self.activation_function_info.setText(
                 "Leaky ReLU: Output mainly [0, +∞), Derivative 1 if x > 0 else α (α=0.01)")
             self.set_default_parameters(learning_rate=0.01, epochs=1000)
@@ -173,7 +174,8 @@ class NeuralNetworkApp(QWidget):
         self.x_data = None
         self.y_data = None
         self.load_csv_predict_button.setEnabled(False)
-        self.status_box.setText("CSV file removed")
+        self.status_box.setText("Status: Not Trained")
+        self.status_box.setStyleSheet("color: orange")
         print("CSV file removed")
 
     def train_network(self):
@@ -193,6 +195,7 @@ class NeuralNetworkApp(QWidget):
             self.training_thread.finished.connect(self.on_training_finished)
             self.training_thread.start()
             self.status_box.setText("Training started")
+            self.status_box.setStyleSheet("color: blue")
             print("Training started")
 
     def show_training_spinner(self):
@@ -212,7 +215,9 @@ class NeuralNetworkApp(QWidget):
     def on_training_finished(self):
         self.hide_training_spinner()
         self.load_csv_predict_button.setEnabled(True)
-        self.status_box.setText("Training completed")
+        self.status_box.setText("Status: Trained")
+        self.status_box.setStyleSheet("color: green")
+        print("Training completed")
 
     def load_csv_for_prediction(self):
         file_path, _ = QFileDialog.getOpenFileName(self, "Load Prediction CSV", "", "CSV Files (*.csv)")
