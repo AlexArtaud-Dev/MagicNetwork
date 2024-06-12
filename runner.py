@@ -42,7 +42,7 @@ def cli():
     activation_function = ActivationFunction.LEAKY_RELU  # Utiliser Tanh pour le problème XOR
 
     net = NeuralNetwork(input_size, output_size, hidden_layers, neurons_per_layer, activation_function, mse, mse_prime)
-    net.fit(x_train, y_train, epochs=100, learning_rate=0.1)
+    net.fit(x_train, y_train, epochs=100000, learning_rate=0.1)
 
     out = net.predict(x_train)
     print(out)
