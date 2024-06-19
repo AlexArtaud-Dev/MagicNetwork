@@ -1,28 +1,20 @@
-from neural_network.layer import Layer
-from neural_network.activations import ActivationLayer
-from neural_network.activation_functions import get_activation_function
+from neural_network.neural_layer import NeuralLayer
 
 class NeuralNetwork:
-    def __init__(self, input_size, output_size, hidden_layers, neurons_per_layer, activation_function, loss_function,
-                 loss_function_prime):
+    def __init__(self, input_size, output_size, hidden_layers, neurons_per_layer, activation_function, loss_function, loss_function_prime):
         self.layers = []
         self.loss = loss_function
         self.loss_prime = loss_function_prime
 
-        activation, activation_prime = get_activation_function(activation_function)
-
         # Input Layer
-        self.add_layer(Layer(input_size, neurons_per_layer))
-        self.add_layer(ActivationLayer(activation, activation_prime))
+        self.add_layer(NeuralLayer(input_size, neurons_per_layer, activation_function))
 
         # Hidden Layers
         for _ in range(hidden_layers):
-            self.add_layer(Layer(neurons_per_layer, neurons_per_layer))
-            self.add_layer(ActivationLayer(activation, activation_prime))
+            self.add_layer(NeuralLayer(neurons_per_layer, neurons_per_layer, activation_function))
 
         # Output Layer
-        self.add_layer(Layer(neurons_per_layer, output_size))
-        self.add_layer(ActivationLayer(activation, activation_prime))
+        self.add_layer(NeuralLayer(neurons_per_layer, output_size, activation_function))
 
     def add_layer(self, layer):
         self.layers.append(layer)
@@ -58,4 +50,4 @@ class NeuralNetwork:
             err /= samples
 
             if (i + 1) % 100 == 0:
-                print(f'Epoch {i + 1}/{epochs}   Error={err}')
+                print(f'Epoch {i + 1}/{epochs} |  Error= {err}')
