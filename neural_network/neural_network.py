@@ -1,6 +1,6 @@
-from .layer import Layer
-from .activations import ActivationLayer
-from .activation_functions import get_activation_function
+from neural_network.layer import Layer
+from neural_network.activations import ActivationLayer
+from neural_network.activation_functions import get_activation_function
 
 class NeuralNetwork:
     def __init__(self, input_size, output_size, hidden_layers, neurons_per_layer, activation_function, loss_function,
@@ -39,7 +39,7 @@ class NeuralNetwork:
 
         return result
 
-    def fit(self, x_train, y_train, epochs = 20000, learning_rate = 0.1):
+    def fit(self, x_train, y_train, epochs=20000, learning_rate=0.1):
         samples = len(x_train)
 
         for i in range(epochs):

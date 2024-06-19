@@ -1,6 +1,4 @@
 import pandas as pd
-import numpy as np
-
 
 class CSVDataLoader:
     def __init__(self, file_path, input_size, output_size):

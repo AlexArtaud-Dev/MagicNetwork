@@ -37,9 +37,9 @@ def cli():
 
     input_size = 2
     output_size = 1
-    hidden_layers = 1  # Une couche cachée est souvent suffisante pour XOR
-    neurons_per_layer = 2  # Deux neurones dans la couche cachée
-    activation_function = ActivationFunction.LEAKY_RELU  # Utiliser Tanh pour le problème XOR
+    hidden_layers = 1
+    neurons_per_layer = 2
+    activation_function = ActivationFunction.LEAKY_RELU
 
     net = NeuralNetwork(input_size, output_size, hidden_layers, neurons_per_layer, activation_function, mse, mse_prime)
     net.fit(x_train, y_train, epochs=100000, learning_rate=0.1)
@@ -49,8 +49,8 @@ def cli():
 
 def test():
     file_path = 'xor_train.csv'
-    input_size = 2  # Example input size
-    output_size = 1  # Example output size
+    input_size = 2
+    output_size = 1
 
     data_loader = CSVDataLoader(file_path, input_size, output_size)
     data_loader.load_and_check_data()
@@ -61,9 +61,9 @@ def test():
 
     input_size = 2
     output_size = 1
-    hidden_layers = 1  # Une couche cachée est souvent suffisante pour XOR
-    neurons_per_layer = 2  # Deux neurones dans la couche cachée
-    activation_function = ActivationFunction.TANH  # Utiliser Tanh pour le problème XOR
+    hidden_layers = 1
+    neurons_per_layer = 2
+    activation_function = ActivationFunction.TANH
 
     net = NeuralNetwork(input_size, output_size, hidden_layers, neurons_per_layer, activation_function, mse, mse_prime)
     net.fit(x_data, y_data, epochs=50000, learning_rate=0.1)

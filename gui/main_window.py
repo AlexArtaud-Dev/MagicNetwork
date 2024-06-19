@@ -11,7 +11,6 @@ from neural_network.neural_network import NeuralNetwork
 from neural_network.activation_functions import ActivationFunction
 from neural_network.loss_functions import mse, mse_prime
 
-
 class NeuralNetworkApp(QWidget):
     def __init__(self):
         super().__init__()
