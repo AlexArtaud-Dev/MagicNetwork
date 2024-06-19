@@ -10,11 +10,13 @@ from neural_network.csv_dataloader import CSVDataLoader
 from neural_network.neural_network import NeuralNetwork
 from neural_network.activation_functions import ActivationFunction
 from neural_network.loss_functions import mse, mse_prime
+import locale
 
 class NeuralNetworkApp(QWidget):
     def __init__(self):
         super().__init__()
         self.initUI()
+        locale.setlocale(locale.LC_NUMERIC, 'C')
         self.showFullScreen()
         self.neural_network = None
         self.data_loader = None
@@ -81,7 +83,7 @@ class NeuralNetworkApp(QWidget):
         # Epochs
         self.epochs_label = QLabel("Epochs:")
         self.epochs_spinbox = QSpinBox()
-        self.epochs_spinbox.setRange(10000, 100000)
+        self.epochs_spinbox.setRange(100, 100000)
         self.epochs_spinbox.setValue(10000)
         self.left_layout.addWidget(self.epochs_label)
         self.left_layout.addWidget(self.epochs_spinbox)
@@ -89,7 +91,8 @@ class NeuralNetworkApp(QWidget):
         # Learning rate
         self.learning_rate_label = QLabel("Learning Rate:")
         self.learning_rate_spinbox = QDoubleSpinBox()
-        self.learning_rate_spinbox.setRange(0.01, 1.0)
+        self.learning_rate_spinbox.setDecimals(5)
+        self.learning_rate_spinbox.setRange(0.00001, 1.0)
         self.learning_rate_spinbox.setValue(0.01)
         self.learning_rate_spinbox.setSingleStep(0.01)
         self.left_layout.addWidget(self.learning_rate_label)
