@@ -1,16 +1,18 @@
-import sys
+import locale
+
 import pandas as pd
-from PySide6.QtWidgets import (QApplication, QWidget, QVBoxLayout, QLabel, QSpinBox, QPushButton,
+from PySide6.QtCore import Qt
+from PySide6.QtGui import QPen, QBrush, QColor
+from PySide6.QtWidgets import (QWidget, QVBoxLayout, QLabel, QSpinBox, QPushButton,
                                QFileDialog, QComboBox, QTextEdit, QHBoxLayout, QDoubleSpinBox, QProgressDialog,
                                QGraphicsView, QGraphicsScene, QGraphicsEllipseItem, QGraphicsLineItem)
-from PySide6.QtCore import Qt, QRectF
-from PySide6.QtGui import QPen, QBrush, QColor
-from .training_thread import TrainingThread
-from neural_network.csv_dataloader import CSVDataLoader
-from neural_network.neural_network import NeuralNetwork
+
 from neural_network.activation_functions import ActivationFunction
+from neural_network.csv_dataloader import CSVDataLoader
 from neural_network.loss_functions import mse, mse_prime
-import locale
+from neural_network.neural_network import NeuralNetwork
+from .training_thread import TrainingThread
+
 
 class NeuralNetworkApp(QWidget):
     def __init__(self):
@@ -23,7 +25,7 @@ class NeuralNetworkApp(QWidget):
         self.training_thread = None
         self.training_dialog = None
 
-    def initUI(self):
+    def initUI(self) -> None:
         self.setWindowTitle("Neural Network Configurator")
 
         self.layout = QVBoxLayout()
@@ -141,7 +143,7 @@ class NeuralNetworkApp(QWidget):
 
         self.setLayout(self.main_layout)
 
-    def update_activation_function_info(self):
+    def update_activation_function_info(self) -> None:
         activation_function = self.activation_function_combobox.currentText()
         if activation_function == "RELU":
             self.activation_function_info.setText("ReLU: Output [0, +∞), Derivative 1 if x > 0 else 0")
@@ -157,11 +159,11 @@ class NeuralNetworkApp(QWidget):
                 "Leaky ReLU: Output mainly [0, +∞), Derivative 1 if x > 0 else α (α=0.01)")
             self.set_default_parameters(learning_rate=0.01, epochs=100000)
 
-    def set_default_parameters(self, learning_rate, epochs):
+    def set_default_parameters(self, learning_rate: float, epochs: int) -> None:
         self.learning_rate_spinbox.setValue(learning_rate)
         self.epochs_spinbox.setValue(epochs)
 
-    def update_visualization(self):
+    def update_visualization(self) -> None:
         input_size = self.input_size_spinbox.value()
         output_size = self.output_size_spinbox.value()
         hidden_layers = self.hidden_layers_spinbox.value()
@@ -200,7 +202,7 @@ class NeuralNetworkApp(QWidget):
                         line.setPen(QPen(Qt.black))
                         self.graphics_scene.addItem(line)
 
-    def load_csv(self):
+    def load_csv(self) -> None:
         file_path, _ = QFileDialog.getOpenFileName(self, "Load CSV", "", "CSV Files (*.csv)")
         if file_path:
             try:
@@ -224,7 +226,7 @@ class NeuralNetworkApp(QWidget):
             except Exception as e:
                 self.status_box.setText(f"Error loading CSV: {e}")
 
-    def remove_csv(self):
+    def remove_csv(self) -> None:
         self.load_csv_layout.removeWidget(self.load_csv_button)
         self.load_csv_layout.removeWidget(self.remove_csv_button)
         self.load_csv_button.deleteLater()
@@ -241,7 +243,7 @@ class NeuralNetworkApp(QWidget):
         self.status_box.setStyleSheet("color: orange")
         self.graphics_scene.clear()
 
-    def train_network(self):
+    def train_network(self) -> None:
         if self.data_loader:
             input_size = self.input_size_spinbox.value()
             output_size = self.output_size_spinbox.value()
@@ -261,7 +263,7 @@ class NeuralNetworkApp(QWidget):
             self.status_box.setStyleSheet("color: blue")
             self.update_visualization()
 
-    def show_training_spinner(self):
+    def show_training_spinner(self) -> None:
         self.training_dialog = QProgressDialog("Training in progress...", None, 0, 0, self)
         self.training_dialog.setWindowModality(Qt.ApplicationModal)
         self.training_dialog.setCancelButton(None)
@@ -271,18 +273,18 @@ class NeuralNetworkApp(QWidget):
         self.training_dialog.setFixedSize(300, 100)
         self.training_dialog.show()
 
-    def hide_training_spinner(self):
+    def hide_training_spinner(self) -> None:
         if self.training_dialog:
             self.training_dialog.close()
 
-    def on_training_finished(self):
+    def on_training_finished(self) -> None:
         self.hide_training_spinner()
         self.load_csv_predict_button.setEnabled(True)
         self.status_box.setText("Status: Trained")
         self.status_box.setStyleSheet("color: green")
         self.update_visualization()
 
-    def load_csv_for_prediction(self):
+    def load_csv_for_prediction(self) -> None:
         file_path, _ = QFileDialog.getOpenFileName(self, "Load Prediction CSV", "", "CSV Files (*.csv)")
         if file_path:
             try:
@@ -300,7 +302,7 @@ class NeuralNetworkApp(QWidget):
             except Exception as e:
                 self.status_box.setText(f"Error loading CSV for prediction: {e}")
 
-    def format_predictions(self, predictions):
+    def format_predictions(self, predictions: []) -> None:
         formatted_predictions = ""
         for idx, prediction in enumerate(predictions):
             formatted_predictions += f"Prediction {idx + 1} -> {prediction[0][0]:.6f}\n"
