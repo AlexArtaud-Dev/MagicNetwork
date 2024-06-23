@@ -27,7 +27,12 @@ class ActivationFunction(Enum):
     SIGMOID = 3
     LEAKY_RELU = 4
 
-def get_activation_function(activation_function):
+def get_activation_function(activation_function: ActivationFunction) -> tuple:
+    """
+    Retourne la fonction d'activation et sa dérivée associée à l'activation_function donnée
+    :param activation_function: Fonction d'activation à utiliser
+    :return: Fonction d'activation et sa dérivée
+    """
     if activation_function == ActivationFunction.RELU:
         return relu, relu_prime
     elif activation_function == ActivationFunction.TANH:
@@ -39,27 +44,69 @@ def get_activation_function(activation_function):
     else:
         raise ValueError("Unsupported activation function")
 
-def relu(x):
+def relu(x: float) -> float:
+    """
+    Fonction d'activation ReLU
+    :param x: Valeur d'entrée
+    :return: La valeur d'entrée passée par la fonction ReLU
+    """
     return np.maximum(0, x)
 
-def relu_prime(x):
+def relu_prime(x: float) -> float:
+    """
+    Dérivée de la fonction d'activation ReLU
+    :param x: Valeur d'entrée
+    :return: La valeur d'entrée passée par la dérivée de la fonction ReLU
+    """
     return np.where(x > 0, 1, 0)
 
-def tanh(x):
+def tanh(x: float) -> float:
+    """
+    Fonction d'activation tangeante hyperbolique
+    :param x: Valeur d'entrée
+    :return: La valeur d'entrée passée par la fonction tangeante hyperbolique
+    """
     return np.tanh(x)
 
-def tanh_prime(x):
+def tanh_prime(x: float) -> float:
+    """
+    Dérivée de la fonction d'activation tangeante hyperbolique
+    :param x: Valeur d'entrée
+    :return: La valeur d'entrée passée par la dérivée de la fonction tangeante hyperbolique
+    """
     return 1 - np.tanh(x)**2
 
-def sigmoid(x):
+def sigmoid(x: float) -> float:
+    """
+    Fonction d'activation sigmoïde
+    :param x: Valeur d'entrée
+    :return: La valeur d'entrée passée par la fonction sigmoïde
+    """
     return 1 / (1 + np.exp(-x))
 
-def sigmoid_prime(x):
+def sigmoid_prime(x: float) -> float:
+    """
+    Dérivée de la fonction d'activation sigmoïde
+    :param x: Valeur d'entrée
+    :return: La valeur d'entrée passée par la dérivée de la fonction sigmoïde
+    """
     sig = sigmoid(x)
     return sig * (1 - sig)
 
-def leaky_relu(x, alpha=0.01):
+def leaky_relu(x: float, alpha: float=0.01) -> float:
+    """
+    Fonction d'activation Leaky ReLU
+    :param x: Valeur d'entrée
+    :param alpha: Valeur de la pente négative
+    :return: La valeur d'entrée passée par la fonction Leaky ReLU
+    """
     return np.where(x > 0, x, alpha * x)
 
-def leaky_relu_prime(x, alpha=0.01):
+def leaky_relu_prime(x: float, alpha: float=0.01)-> float:
+    """
+    Dérivée de la fonction d'activation Leaky ReLU
+    :param x: Valeur d'entrée
+    :param alpha: Valeur de la pente négative
+    :return: La valeur d'entrée passée par la dérivée de la fonction Leaky ReLU
+    """
     return np.where(x > 0, 1, alpha)
