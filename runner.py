@@ -12,7 +12,11 @@ class Runner(Enum):
     GUI = 2
     TEST = 3
 
-def execute_runner(runner):
+def execute_runner(runner: Runner) -> None:
+    """
+    Exécute le runner spécifié
+    :param runner:  Runner à exécuter
+    """
     if runner == Runner.CLI:
         cli()
     elif runner == Runner.GUI:
@@ -23,6 +27,9 @@ def execute_runner(runner):
         raise ValueError("Unsupported runner")
 
 def cli():
+    """
+    Exécute le runner en ligne de commande
+    """
     # Données XOR
     x_train = np.array([
         [[0, 0]],
@@ -48,6 +55,9 @@ def cli():
     print(out)
 
 def test():
+    """
+    Exécute le runner de test
+    """
     file_path = 'xor_train.csv'
     input_size = 2
     output_size = 1
@@ -72,6 +82,9 @@ def test():
     print(out)
 
 def gui():
+    """
+    Exécute le runner avec interface graphique
+    """
     import sys
     from PySide6.QtWidgets import QApplication
     app = QApplication(sys.argv)

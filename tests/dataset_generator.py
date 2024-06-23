@@ -2,8 +2,18 @@ import os
 import pandas as pd
 import numpy as np
 
+from neural_network.activation_functions import ActivationFunction
 
-def generate_synthetic_data(num_samples_train, num_samples_test, input_size, activation_function):
+
+def generate_synthetic_data(num_samples_train: int, num_samples_test: int, input_size: int, activation_function: ActivationFunction) -> tuple:
+    """
+    Génère des données synthétiques pour un problème de régression simple
+    :param num_samples_train: Nombre d'échantillons pour l'ensemble d'entraînement
+    :param num_samples_test: Nombre d'échantillons pour l'ensemble de test
+    :param input_size: Nombre de features
+    :param activation_function: Fonction d'activation utilisée pour générer les données
+    :return: Noms des fichiers CSV contenant les données d'entraînement et de test, et les résultats attendus pour le test
+    """
     np.random.seed(0)
 
     # Generate random data for train
@@ -29,7 +39,10 @@ def generate_synthetic_data(num_samples_train, num_samples_test, input_size, act
     return train_filename, test_filename, y_test
 
 
-def main():
+def main() -> None:
+    """
+    Génère des données synthétiques pour un problème de régression simple
+    """
     output_dir = "../tests/datasets"
     os.makedirs(output_dir, exist_ok=True)
 
