@@ -169,3 +169,6 @@ pandas~=2.2.2
 PySide6~=6.7.2
 numpy~=2.0.0
 ```
+
+
+Des fichiers de test sont inclus dans le dossier `tests/datasets` du projet, et les configurations + résultats des tests sont stockés dans le dossier `tests/results`.
