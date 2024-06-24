@@ -1,7 +1,9 @@
 
-# 🌟 Framework de Réseau de Neurones 🌟
+# 🌟 Projet de Réseau de Neurones 🌟
 
-Bienvenue dans ce framework de réseau de neurones simple et efficace. Que vous soyez un débutant ou un expert en apprentissage automatique, ce framework vous permet de créer, entraîner et évaluer des réseaux de neurones avec facilité.
+## 📝 Vue d'ensemble
+
+Ce projet est une implémentation d'un réseau de neurones à partir de zéro en utilisant Python. L'implémentation inclut des couches, des neurones, des fonctions d'activation et des fonctions de perte personnalisées. Le projet comprend également une interface graphique (GUI) pour configurer et entraîner le réseau de neurones, ainsi qu'une interface en ligne de commande (CLI) pour l'exécution en ligne de commande.
 
 ## ✨ Fonctionnalités
 
@@ -10,48 +12,42 @@ Bienvenue dans ce framework de réseau de neurones simple et efficace. Que vous 
 - 🔗 **Couches entièrement connectées**
 - 🛠️ **Facile à utiliser et à étendre**
 
-## 🚀 Installation
 
-1. Clonez le dépôt.
-2. Assurez-vous d'avoir les packages requis installés :
-    ```bash
-    pip install numpy
-    ```
+## 📦 Installation
 
-## 📚 Utilisation
+Pour exécuter le projet, vous devez avoir Python installé. Vous pouvez installer les dépendances requises en utilisant la commande suivante :
 
-### Exemple
-
-Voici un exemple d'utilisation du framework avec un problème simple de XOR :
-
-```python
-import numpy as np
-from neural_network.neural_network import NeuralNetwork
-from neural_network.activation_functions import ActivationFunction
-from neural_network.loss_functions import mse, mse_prime
-
-if __name__ == "__main__":
-    # Données XOR
-    x_train = np.array([
-        [[0, 0]],
-        [[0, 1]],
-        [[1, 0]],
-        [[1, 1]]
-    ])
-    y_train = np.array([[0.0], [1.0], [1.0], [0.0]])
-
-    input_size = 2
-    output_size = 1
-    hidden_layers = 1
-    neurons_per_layer = 2
-    activation_function = ActivationFunction.LEAKY_RELU
-
-    net = NeuralNetwork(input_size, output_size, hidden_layers, neurons_per_layer, activation_function, mse, mse_prime)
-    net.fit(x_train, y_train, epochs=10000, learning_rate=0.01)
-
-    out = net.predict(x_train)
-    print(out)
+```bash
+pip install -r requirements.txt
 ```
+
+## 🗂️ Structure du Projet
+
+Le projet est organisé en plusieurs modules Python :
+
+- `activation_functions.py` : Contient diverses fonctions d'activation et leurs dérivées.
+- `csv_dataloader.py` : Gère le chargement et la validation des données à partir de fichiers CSV.
+- `loss_functions.py` : Contient des fonctions de perte et leurs dérivées.
+- `neural_layer.py` : Définit les couches du réseau de neurones.
+- `neural_network.py` : Implémente le réseau de neurones.
+- `neuron.py` : Définit les neurones individuels.
+- `main_window.py` : Implémentation de l'interface graphique pour configurer et entraîner le réseau de neurones.
+- `training_thread.py` : Gère le processus d'entraînement dans un thread séparé pour l'interface graphique.
+- `runner.py` : Contient différents modes d'exécution (CLI, GUI, TEST).
+- `main.py` : Point d'entrée pour exécuter le projet.
+
+## ⚙️ Configuration du Réseau de Neurones
+
+### Paramètres
+
+- `input_size` : Nombre de caractéristiques d'entrée.
+- `output_size` : Nombre de caractéristiques de sortie.
+- `hidden_layers` : Nombre de couches cachées dans le réseau.
+- `neurons_per_layer` : Nombre de neurones par couche cachée.
+- `activation_function` : Fonction d'activation à utiliser (RELU, TANH, SIGMOID, LEAKY_RELU).
+- `loss_function` : Fonction de perte à utiliser (actuellement, seule MSE est implémentée).
+- `epochs` : Nombre d'itérations d'entraînement.
+- `learning_rate` : Taux d'apprentissage.
 
 ### ⚡ Fonctions d'Activation
 
@@ -77,18 +73,6 @@ Le framework supporte les fonctions d'activation suivantes :
     - **Dérivée** : 1 si x > 0, sinon α (souvent α = 0.01)
     - **Cas d'utilisation** : Éviter les neurones morts (problème de gradient mort)
 
-### 🔧 Paramètres
-
-- **input_size** : Nombre de caractéristiques d'entrée
-- **output_size** : Nombre de caractéristiques de sortie
-- **hidden_layers** : Nombre de couches cachées
-- **neurons_per_layer** : Nombre de neurones par couche cachée
-- **activation_function** : Fonction d'activation à utiliser (ReLU, Tanh, Sigmoid, Leaky ReLU)
-- **loss_function** : Fonction de perte à utiliser (actuellement seule la MSE est implémentée)
-- **loss_function_prime** : Dérivée de la fonction de perte
-- **epochs** : Nombre d'itérations d'entraînement
-- **learning_rate** : Taux d'apprentissage pour la mise à jour des poids
-
 ### 🎯 Obtenir de Bons Résultats
 
 Pour obtenir de bons résultats pour différents types de données, considérez les conseils suivants :
@@ -99,11 +83,89 @@ Pour obtenir de bons résultats pour différents types de données, considérez 
 4. **🧠 Taux d'Apprentissage** : Ajustez le taux d'apprentissage. Un taux trop élevé peut entraîner une convergence trop rapide vers une solution sous-optimale, tandis qu'un taux trop bas peut rendre le processus d'entraînement trop lent.
 5. **⏳ Époques** : Entraînez pendant un nombre suffisant d'époques. Cependant, méfiez-vous du surapprentissage ; envisagez d'utiliser l'arrêt précoce ou la validation croisée pour trouver le nombre optimal d'époques.
 
-## 📜 Licence
 
-Ce projet est sous licence MIT. Voir le fichier LICENSE pour plus de détails.
+## 🚀 Entraînement et Test
 
-## 🤝 Contribuer
+### Format des Données d'Entraînement
 
-Les contributions sont les bienvenues ! Veuillez ouvrir une issue ou soumettre une pull request pour toute amélioration ou correction de bug.
+Les données d'entraînement doivent être au format CSV avec les caractéristiques d'entrée et les valeurs de sortie. Les caractéristiques d'entrée doivent être préfixées par 'Input' et les caractéristiques de sortie par 'Output'.
 
+Exemple de fichier CSV d'entraînement (`train_data_relu.csv`) :
+
+```csv
+Input1,Input2,Output
+0,0,0
+0,1,1
+1,0,1
+1,1,0
+```
+
+### Format des Données de Test
+
+Les données de test doivent suivre le même format que les données d'entraînement, mais sans les valeurs de sortie.
+
+Exemple de fichier CSV de test (`test_data_relu.csv`) :
+
+```csv
+Input1,Input2
+0,0
+0,1
+1,0
+1,1
+```
+
+## 💻 Utilisation
+
+### Interface Graphique (GUI)
+
+Pour lancer l'application avec l'interface graphique, exécutez le script `main.py` :
+
+```bash
+python main.py
+```
+
+L'application GUI permet de configurer les paramètres du réseau de neurones, de charger des fichiers CSV pour l'entraînement et les prédictions, et de visualiser la structure du réseau.
+
+### Ligne de Commande (CLI)
+
+Pour exécuter l'application en ligne de commande, modifiez le script `main.py` pour utiliser le mode CLI et exécutez-le :
+
+```bash
+python main.py
+```
+
+Exemple d'exécution en ligne de commande avec les données XOR :
+
+```python
+def cli():
+    x_train = np.array([
+        [[0, 0]],
+        [[0, 1]],
+        [[1, 0]],
+        [[1, 1]]
+    ])
+    y_train = np.array([[0], [1], [1], [0]])
+
+    print("X data:", x_train)
+    print("Y data:", y_train)
+
+    input_size = 2
+    output_size = 1
+    hidden_layers = 1
+    neurons_per_layer = 2
+    activation_function = ActivationFunction.LEAKY_RELU
+
+    net = NeuralNetwork(input_size, output_size, hidden_layers, neurons_per_layer, activation_function, mse, mse_prime)
+    net.fit(x_train, y_train, epochs=100000, learning_rate=0.1)
+
+    out = net.predict(x_train)
+    print(out)
+```
+
+Fichier `requirements.txt` :
+
+```text
+pandas~=2.2.2
+PySide6~=6.7.2
+numpy~=2.0.0
+```
